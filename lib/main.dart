@@ -5,6 +5,8 @@ import "package:flutter_vector_icons/flutter_vector_icons.dart";
 import "package:flutter_map/flutter_map.dart" as flutterMap;
 import "package:latlong/latlong.dart" as latLng;
 
+import "InfoCard.dart";
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -31,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int total_cases = 0, recovered = 0, deaths = 0;
   bool isLoading = true;
-  String imgUrl = "", countryName;
+  String countryName;
   List detailData = [];
 
   @override
@@ -54,15 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var location in detailData) {
       print(location);
     }
-    // if (countryName != null) {
-    //   String url =
-    //       "https://covid19.mathdro.id/api/countries/$countryName/confirmed";
-    //   http.Response data = await http.get(url);
-    //   dynamic coronaDetail = jsonDecode(data.body);
-    //   for (var location in coronaDetail) {
-    //     print(location["lat"]);
-    //   }
-    // }
   }
 
 // Method to generate all the markers on map from detailData
@@ -100,6 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         : "https://covid19.mathdro.id/api/countries/$countryName";
     http.Response data = await http.get(url);
     dynamic coronaData = jsonDecode(data.body);
+
     setState(() {
       total_cases = coronaData["confirmed"]["value"];
       recovered = coronaData["recovered"]["value"];
@@ -248,45 +242,6 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Get Data',
         child: Icon(AntDesign.earth),
-      ),
-    );
-  }
-}
-
-class InfoCard extends StatelessWidget {
-  const InfoCard({Key key, this.total_cases, this.title, this.color, this.icon})
-      : super(key: key);
-
-  final int total_cases;
-  final String title;
-  final Color color;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-      color: color,
-      child: Container(
-        height: 90.0,
-        padding: EdgeInsets.all(5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Icon(
-              icon,
-              size: 25,
-            ),
-            Text(
-              total_cases.toString(),
-              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              title,
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
       ),
     );
   }
