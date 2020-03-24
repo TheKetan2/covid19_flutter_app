@@ -223,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   detailData[0]["lat"].toDouble(),
                                   detailData[0]["long"].toDouble(),
                                 ),
-                          zoom: 2.5,
+                          zoom: 2.8,
                         ),
                         layers: [
                           new flutterMap.TileLayerOptions(
