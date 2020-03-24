@@ -45,17 +45,19 @@ flutter:
   uses-material-design: true
   assets:
     - assets/img/corona.png
-    - assets/img/IN.png
-    - assets/img/AF.png
-    - assets/img/ID.png
-    - assets/img/IT.png
-    - assets/img/IQ.png
-    - assets/img/ES.png
-    - assets/img/DE.png
-    - assets/img/JP.png
-    - assets/img/US.png
-    - assets/img/KR.png
-    - assets/img/PK.png
+    - assets/img/in.png
+    - assets/img/ir.png
+    - assets/img/af.png
+    - assets/img/id.png
+    - assets/img/it.png
+    - assets/img/iq.png
+    - assets/img/es.png
+    - assets/img/de.png
+    - assets/img/jp.png
+    - assets/img/us.png
+    - assets/img/kr.png
+    - assets/img/pk.png
+    - assets/img/au.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg

@@ -47,12 +47,12 @@ class _MyHomePageState extends State<MyHomePage> {
         : "https://covid19.mathdro.id/api/countries/$countryName/confirmed";
     http.Response data = await http.get(url);
     dynamic coronaDetail = jsonDecode(data.body);
-
+    print(coronaDetail);
     setState(() {
       detailData = coronaDetail;
     });
     for (var location in detailData) {
-      print(location[""]);
+      print(location);
     }
     // if (countryName != null) {
     //   String url =
@@ -82,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: new Icon(
               Icons.pin_drop,
               color: Colors.red,
-              size: 10,
+              size: 20,
             ),
           ),
         ),
@@ -111,10 +111,27 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<DropdownMenuItem<String>> showDropDown() {
     List<DropdownMenuItem<String>> dropDownItem = [];
-    countries.keys.forEach((key) => dropDownItem.add(DropdownMenuItem(
-          child: Text(key),
+    countries.keys.forEach(
+      (key) => dropDownItem.add(
+        DropdownMenuItem(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Image.asset(
+                "assets/img/${countries[key]}.png",
+                width: 20.0,
+                height: 15.0,
+              ),
+              Container(
+                width: 10.0,
+              ),
+              Text(key),
+            ],
+          ),
           value: countries[key],
-        )));
+        ),
+      ),
+    );
 
     print(dropDownItem.length);
     return dropDownItem;
@@ -276,16 +293,17 @@ class InfoCard extends StatelessWidget {
 }
 
 Map<String, String> countries = {
-  "Afghanistan": "AF",
-  "India": "IN",
-  "Indonesia": "ID",
-  "Iran": "IR",
-  "Iraq": "IQ",
-  "Spain": "ES",
-  "Germany": "DE",
-  "Japan": "JP",
-  "US": "US",
-  "Italy": "IT",
-  "Korea, South": "KR",
-  "Pakistan": "PK",
+  "Afghanistan": "af",
+  "India": "in",
+  "Indonesia": "id",
+  "Iran": "ir",
+  "Iraq": "iq",
+  "Spain": "es",
+  "Germany": "de",
+  "Japan": "jp",
+  "US": "us",
+  "Italy": "it",
+  "Korea, South": "kr",
+  "Pakistan": "pk",
+  "Australia": "au"
 };
