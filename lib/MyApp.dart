@@ -228,10 +228,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         layers: [
                           new flutterMap.TileLayerOptions(
                             urlTemplate: "https://api.tiles.mapbox.com/v4/"
-                                "{id}/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoidGhla2V0YW4yIiwiYSI6ImNrODNzbjJhczFkOWEzZnBnY3hvZDEyc3oifQ.Sq0TnHXyfJgodPce7SBlJQ",
+                                "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
                             additionalOptions: {
-                              'accessToken':
-                                  'pk.eyJ1IjoidGhla2V0YW4yIiwiYSI6ImNrODNzbjJhczFkOWEzZnBnY3hvZDEyc3oifQ.Sq0TnHXyfJgodPce7SBlJQ',
+                              'accessToken': '<PUT_ACCESS_TOKEN_HERE>',
                               'id': 'mapbox.streets',
                             },
                           ),
