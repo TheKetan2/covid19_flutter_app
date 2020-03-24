@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "LoadingScreen.dart";
 
 class InfoCard extends StatelessWidget {
   const InfoCard(
@@ -25,15 +26,7 @@ class InfoCard extends StatelessWidget {
         height: 90.0,
         padding: EdgeInsets.all(5),
         child: isLoading
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Text(title.toLowerCase() + "..."),
-                  ],
-                ),
-              )
+            ? LoadingScreen(title: title)
             : Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[

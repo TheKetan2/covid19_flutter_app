@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int total_cases = 0, recovered = 0, deaths = 0;
-  bool isLoading = true;
+  bool isLoading = true, pinClicked = false;
   String countryName;
   List detailData = [];
 
@@ -39,6 +39,25 @@ class _MyHomePageState extends State<MyHomePage> {
     _getDetailedData();
     _getCovidData();
     super.initState();
+  }
+
+  void _getCovidData() async {
+    setState(() {
+      isLoading = true;
+    });
+    String url = countryName == null
+        ? "https://covid19.mathdro.id/api"
+        : "https://covid19.mathdro.id/api/countries/$countryName";
+    http.Response data = await http.get(url);
+    dynamic coronaData = jsonDecode(data.body);
+
+    setState(() {
+      total_cases = coronaData["confirmed"]["value"];
+      recovered = coronaData["recovered"]["value"];
+      deaths = coronaData["deaths"]["value"];
+      isLoading = false;
+    });
+    print(countryName);
   }
 
   void _getDetailedData() async {
@@ -70,35 +89,21 @@ class _MyHomePageState extends State<MyHomePage> {
             location["long"].toDouble(),
           ),
           builder: (context) => new Container(
-            child: new Icon(
-              Icons.pin_drop,
-              color: Colors.red,
-              size: 20,
-            ),
+            child: IconButton(
+                icon: Icon(
+                  Icons.pin_drop,
+                  color: Colors.red,
+                ),
+                onPressed: () {
+                  setState(() {
+                    pinClicked = !pinClicked;
+                  });
+                }),
           ),
         ),
       );
     }
     return marker;
-  }
-
-  void _getCovidData() async {
-    setState(() {
-      isLoading = true;
-    });
-    String url = countryName == null
-        ? "https://covid19.mathdro.id/api"
-        : "https://covid19.mathdro.id/api/countries/$countryName";
-    http.Response data = await http.get(url);
-    dynamic coronaData = jsonDecode(data.body);
-
-    setState(() {
-      total_cases = coronaData["confirmed"]["value"];
-      recovered = coronaData["recovered"]["value"];
-      deaths = coronaData["deaths"]["value"];
-      isLoading = false;
-    });
-    print(countryName);
   }
 
   List<DropdownMenuItem<String>> showDropDown() {
@@ -204,25 +209,36 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ))
                 : Expanded(
-                    child: flutterMap.FlutterMap(
-                      options: new flutterMap.MapOptions(
-                        center: detailData.length == 0
-                            ? latLng.LatLng(51.5, -0.09)
-                            : latLng.LatLng(
-                                detailData[0]["lat"].toDouble(),
-                                detailData[0]["long"].toDouble(),
-                              ),
-                        zoom: 1.0,
+                    child: Card(
+                      margin: EdgeInsets.only(
+                        left: 3,
+                        right: 3,
+                        bottom: 3,
                       ),
-                      layers: [
-                        new flutterMap.TileLayerOptions(
-                          urlTemplate:
-                              "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                          subdomains: ['a', 'b', 'c'],
+                      child: flutterMap.FlutterMap(
+                        options: new flutterMap.MapOptions(
+                          center: detailData.length == 0
+                              ? latLng.LatLng(51.5, -0.09)
+                              : latLng.LatLng(
+                                  detailData[0]["lat"].toDouble(),
+                                  detailData[0]["long"].toDouble(),
+                                ),
+                          zoom: 2.5,
                         ),
-                        new flutterMap.MarkerLayerOptions(
-                            markers: generateMarker()),
-                      ],
+                        layers: [
+                          new flutterMap.TileLayerOptions(
+                            urlTemplate: "https://api.tiles.mapbox.com/v4/"
+                                "{id}/{z}/{x}/{y}@2x.png?access_token=pk.eyJ1IjoidGhla2V0YW4yIiwiYSI6ImNrODNzbjJhczFkOWEzZnBnY3hvZDEyc3oifQ.Sq0TnHXyfJgodPce7SBlJQ",
+                            additionalOptions: {
+                              'accessToken':
+                                  'pk.eyJ1IjoidGhla2V0YW4yIiwiYSI6ImNrODNzbjJhczFkOWEzZnBnY3hvZDEyc3oifQ.Sq0TnHXyfJgodPce7SBlJQ',
+                              'id': 'mapbox.streets',
+                            },
+                          ),
+                          new flutterMap.MarkerLayerOptions(
+                              markers: generateMarker()),
+                        ],
+                      ),
                     ),
                   ),
           ],
@@ -233,6 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {
           setState(() {
             countryName = null;
+            pinClicked = false;
           });
           _getCovidData();
           _getDetailedData();
