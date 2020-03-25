@@ -4,6 +4,7 @@ import "package:latlong/latlong.dart" as latLng;
 import "package:flutter_vector_icons/flutter_vector_icons.dart";
 import "dart:convert";
 import "package:http/http.dart" as http;
+import 'countries.dart';
 
 import "InfoCard.dart";
 
@@ -33,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = true, pinClicked = false;
   String countryName;
   List detailData = [];
+  double lat = 0, long = 0;
 
   @override
   initState() {
@@ -91,12 +93,14 @@ class _MyHomePageState extends State<MyHomePage> {
           builder: (context) => new Container(
             child: IconButton(
                 icon: Icon(
-                  Icons.pin_drop,
+                  Entypo.location_pin,
                   color: Colors.red,
                 ),
                 onPressed: () {
                   setState(() {
-                    pinClicked = !pinClicked;
+                    pinClicked = true;
+                    lat = location["lat"];
+                    long = location["long"];
                   });
                 }),
           ),
@@ -106,26 +110,109 @@ class _MyHomePageState extends State<MyHomePage> {
     return marker;
   }
 
+  Widget showContainer() {
+    print(lat.toString() + " " + long.toString());
+    dynamic location = {};
+    for (var country in detailData) {
+      if (country["lat"] == lat && country["long"] == long) {
+        location = country;
+      }
+    }
+    // print(location);
+    return InkWell(
+      onTap: () {
+        setState(() {
+          pinClicked = false;
+        });
+      },
+      child: Card(
+        color: Colors.white,
+        elevation: 2.0,
+        child: Container(
+          width: 150.0,
+          height: 100.0,
+          padding: EdgeInsets.all(5.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              location["provinceState"] != null
+                  ? Text(
+                      "City: ${location["provinceState"]}",
+                      style: TextStyle(color: Colors.black),
+                    )
+                  : Text(
+                      "Country: ${location["countryRegion"]}",
+                      style: TextStyle(color: Colors.black),
+                    ),
+              Text(
+                "Total Cases: ${location["confirmed"]}",
+                style: TextStyle(color: Colors.black),
+              ),
+              Text(
+                "Recovered: ${location["recovered"]}",
+                style: TextStyle(color: Colors.black),
+              ),
+              Text(
+                "Deaths: ${location["deaths"]}",
+                style: TextStyle(color: Colors.black),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // List<DropdownMenuItem<String>> showDropDown() {
+  // List<DropdownMenuItem<String>> dropDownItem = [];
+  // countries.keys.forEach(
+  //   (key) => dropDownItem.add(
+  //     DropdownMenuItem(
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.start,
+  //         children: <Widget>[
+  //           Image.asset(
+  //             "assets/img/${countries[key]}.png",
+  //             width: 20.0,
+  //             height: 15.0,
+  //           ),
+  //           Container(
+  //             width: 10.0,
+  //           ),
+  //           Text(key),
+  //         ],
+  //       ),
+  //       value: countries[key],
+  //     ),
+  //   ),
+  // );
+
+  //   print(dropDownItem.length);
+  //   return dropDownItem;
+  // }
+
   List<DropdownMenuItem<String>> showDropDown() {
     List<DropdownMenuItem<String>> dropDownItem = [];
-    countries.keys.forEach(
-      (key) => dropDownItem.add(
+    totalCountries.forEach(
+      (country) => dropDownItem.add(
         DropdownMenuItem(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Image.asset(
-                "assets/img/${countries[key]}.png",
-                width: 20.0,
-                height: 15.0,
-              ),
+              // Image.network(
+              //   "https://raw.githubusercontent.com/hjnilsson/country-flags/master/png100px/${country["iso2"].toLowerCase()}.png",
+              //   width: 20.0,
+              //   height: 15.0,
+              // ),
+              // Text(country[""iso2""]),
               Container(
                 width: 10.0,
               ),
-              Text(key),
+              Text(country["name"]),
             ],
           ),
-          value: countries[key],
+          value: country["iso2"],
         ),
       ),
     );
@@ -215,27 +302,38 @@ class _MyHomePageState extends State<MyHomePage> {
                         right: 3,
                         bottom: 3,
                       ),
-                      child: flutterMap.FlutterMap(
-                        options: new flutterMap.MapOptions(
-                          center: detailData.length == 0
-                              ? latLng.LatLng(51.5, -0.09)
-                              : latLng.LatLng(
-                                  detailData[0]["lat"].toDouble(),
-                                  detailData[0]["long"].toDouble(),
-                                ),
-                          zoom: 2.8,
-                        ),
-                        layers: [
-                          new flutterMap.TileLayerOptions(
-                            urlTemplate: "https://api.tiles.mapbox.com/v4/"
-                                "{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}",
-                            additionalOptions: {
-                              'accessToken': '<PUT_ACCESS_TOKEN_HERE>',
-                              'id': 'mapbox.streets',
-                            },
+                      child: Stack(
+                        children: <Widget>[
+                          flutterMap.FlutterMap(
+                            options: new flutterMap.MapOptions(
+                              center: detailData.length == 0
+                                  ? latLng.LatLng(51.5, -0.09)
+                                  : latLng.LatLng(
+                                      detailData[0]["lat"].toDouble(),
+                                      detailData[0]["long"].toDouble(),
+                                    ),
+                              zoom: 2.8,
+                            ),
+                            layers: [
+                              new flutterMap.TileLayerOptions(
+                                urlTemplate: "https://api.tiles.mapbox.com/v4/"
+                                    "{id}/{z}/{x}/{y}@2x.png?access_token={YOUR API TOKEN}",
+                                additionalOptions: {
+                                  'accessToken': '<YOUR API TOKEN>',
+                                  'id': 'mapbox.streets',
+                                },
+                              ),
+                              new flutterMap.MarkerLayerOptions(
+                                markers: generateMarker(),
+                              ),
+                            ],
                           ),
-                          new flutterMap.MarkerLayerOptions(
-                              markers: generateMarker()),
+                          pinClicked
+                              ? Positioned(
+                                  top: 100,
+                                  child: showContainer(),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
@@ -260,20 +358,20 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-Map<String, String> countries = {
-  "China": "cn",
-  "Italy": "it",
-  "US": "us",
-  "Spain": "es",
-  "Germany": "de",
-  "Iran": "ir",
-  "France": "fr",
-  "Korea, South": "kr",
-  "Afghanistan": "af",
-  "India": "in",
-  "Indonesia": "id",
-  "Iraq": "iq",
-  "Japan": "jp",
-  "Pakistan": "pk",
-  "Australia": "au",
-};
+// Map<String, String> countries = {
+//   "China": "cn",
+//   "Italy": "it",
+//   "US": "us",
+//   "Spain": "es",
+//   "Germany": "de",
+//   "Iran": "ir",
+//   "France": "fr",
+//   "Korea, South": "kr",
+//   "Afghanistan": "af",
+//   "India": "in",
+//   "Indonesia": "id",
+//   "Iraq": "iq",
+//   "Japan": "jp",
+//   "Pakistan": "pk",
+//   "Australia": "au",
+// };
