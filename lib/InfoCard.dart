@@ -21,7 +21,8 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.symmetric(vertical: 3, horizontal: 3),
-      color: color,
+      // color: Colors.black,
+      elevation: 5,
       child: Container(
         height: 90.0,
         padding: EdgeInsets.all(5),
@@ -33,15 +34,22 @@ class InfoCard extends StatelessWidget {
                   Icon(
                     icon,
                     size: 25,
+                    color: color,
                   ),
                   Text(
                     total_cases.toString(),
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontSize: 25.0,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                    ),
                   ),
                   Text(
                     title,
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: color,
+                    ),
                   ),
                 ],
               ),

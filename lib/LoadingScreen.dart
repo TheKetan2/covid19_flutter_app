@@ -14,7 +14,9 @@ class LoadingScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          CircularProgressIndicator(),
+          CircularProgressIndicator(
+            strokeWidth: 2.0,
+          ),
           Text(title.toLowerCase() + "..."),
         ],
       ),

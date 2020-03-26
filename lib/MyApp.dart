@@ -119,48 +119,69 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     }
     // print(location);
-    return InkWell(
-      onTap: () {
-        setState(() {
-          pinClicked = false;
-        });
-      },
-      child: Card(
-        color: Colors.white,
-        elevation: 2.0,
-        child: Container(
-          width: 150.0,
-          height: 100.0,
-          padding: EdgeInsets.all(5.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              location["provinceState"] != null
-                  ? Text(
-                      "City: ${location["provinceState"]}",
-                      style: TextStyle(color: Colors.black),
-                    )
-                  : Text(
-                      "Country: ${location["countryRegion"]}",
-                      style: TextStyle(color: Colors.black),
-                    ),
-              Text(
-                "Total Cases: ${location["confirmed"]}",
-                style: TextStyle(color: Colors.black),
-              ),
-              Text(
-                "Recovered: ${location["recovered"]}",
-                style: TextStyle(color: Colors.black),
-              ),
-              Text(
-                "Deaths: ${location["deaths"]}",
-                style: TextStyle(color: Colors.black),
-              )
-            ],
+    return Stack(
+      children: <Widget>[
+        Card(
+          color: Colors.white,
+          elevation: 10.0,
+          child: Container(
+            width: 150.0,
+            height: 100.0,
+            padding: EdgeInsets.all(5.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                location["provinceState"] != null
+                    ? Text(
+                        "City: ${location["provinceState"]}",
+                        style: TextStyle(color: Colors.black),
+                      )
+                    : Text(
+                        "Country: ${location["countryRegion"]}",
+                        style: TextStyle(color: Colors.black),
+                      ),
+                Text(
+                  "Total Cases: ${location["confirmed"]}",
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  "Recovered: ${location["recovered"]}",
+                  style: TextStyle(color: Colors.black),
+                ),
+                Text(
+                  "Deaths: ${location["deaths"]}",
+                  style: TextStyle(color: Colors.black),
+                )
+              ],
+            ),
           ),
         ),
-      ),
+        Positioned(
+          right: 0,
+          top: -9,
+          child: Container(
+            width: 25,
+            decoration: BoxDecoration(
+                color: Colors.black,
+                // borderRadius: ,
+                shape: BoxShape.circle),
+            child: IconButton(
+              padding: EdgeInsets.all(0),
+              icon: Icon(
+                FontAwesome.close,
+                color: Colors.red,
+                size: 20,
+              ),
+              onPressed: () {
+                setState(() {
+                  pinClicked = false;
+                });
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 
