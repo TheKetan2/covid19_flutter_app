@@ -113,12 +113,19 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget showContainer() {
     print(lat.toString() + " " + long.toString());
     dynamic location = {};
+    dynamic iso2;
     for (var country in detailData) {
       if (country["lat"] == lat && country["long"] == long) {
         location = country;
       }
     }
-    print(location);
+    print(detailData);
+
+    for (var item in totalCountries) {
+      if (location["countryRegion"] == item["name"]) {
+        iso2 = item["iso2"];
+      }
+    }
 
     return Center(
       child: Container(
@@ -126,17 +133,22 @@ class _MyHomePageState extends State<MyHomePage> {
           borderRadius: BorderRadius.circular(10),
           color: Colors.white,
         ),
-        // height: 150.0,
-        // width: 200.0,
-        margin: EdgeInsets.all(15),
         padding: EdgeInsets.all(5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Center(
+              child: CircleAvatar(
+                maxRadius: 20,
+                backgroundImage: NetworkImage(
+                  "https://raw.githubusercontent.com/hjnilsson/country-flags/master/png100px/${iso2.toString().toLowerCase()}.png",
+                ),
+              ),
+            ),
             location["provinceState"] != null
                 ? Text(
-                    location["provinceState"].toUpperCase(),
+                    location["provinceState"].toString().toUpperCase(),
                     style: TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
@@ -161,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.green,
                 ),
                 getInfoBox(
-                  textValue: location["recovered"],
+                  textValue: location["deaths"],
                   icon: Foundation.skull,
                   color: Colors.red,
                 )
@@ -229,9 +241,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 20,
               ),
               Text(country["name"]),
-              // Text(
-              //   country["iso2"].toString(),
-              // )
             ],
           ),
           value: country["iso2"],
@@ -299,43 +308,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-
-            // Row(
-            //   children: <Widget>[
-            //     Expanded(
-            //       child: InfoCard(
-            //         icon: Entypo.emoji_sad,
-            //         total_cases: total_cases,
-            //         title: "TOTAL CASES",
-            //         color: Colors.orange,
-            //         isLoading: isLoading,
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: <Widget>[
-            //     Expanded(
-            //       child: InfoCard(
-            //         icon: Entypo.emoji_happy,
-            //         total_cases: recovered,
-            //         title: "RECOVERED",
-            //         color: Colors.green,
-            //         isLoading: isLoading,
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: InfoCard(
-            //         icon: Foundation.skull,
-            //         total_cases: deaths,
-            //         title: "DEATHS",
-            //         color: Colors.red,
-            //         isLoading: isLoading,
-            //       ),
-            //     ),
-            // ],
-            // ),
             isLoading
                 ? Expanded(
                     child: Center(
@@ -385,14 +357,19 @@ class _MyHomePageState extends State<MyHomePage> {
                             ],
                           ),
                           pinClicked
-                              ? Dialog(
-                                  backgroundColor:
-                                      Colors.white10.withAlpha(100),
-                                  elevation: 5.0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12.0),
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 60, horizontal: 20),
+                                  height: 250,
+                                  child: Dialog(
+                                    backgroundColor:
+                                        Colors.white10.withAlpha(100),
+                                    elevation: 5.0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                    child: showContainer(),
                                   ),
-                                  child: showContainer(),
                                 )
                               : Container(),
                         ],
@@ -449,21 +426,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
-// Map<String, String> countries = {
-//   "China": "cn",
-//   "Italy": "it",
-//   "US": "us",
-//   "Spain": "es",
-//   "Germany": "de",
-//   "Iran": "ir",
-//   "France": "fr",
-//   "Korea, South": "kr",
-//   "Afghanistan": "af",
-//   "India": "in",
-//   "Indonesia": "id",
-//   "Iraq": "iq",
-//   "Japan": "jp",
-//   "Pakistan": "pk",
-//   "Australia": "au",
-// };
