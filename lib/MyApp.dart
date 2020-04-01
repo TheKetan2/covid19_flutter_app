@@ -166,34 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  // List<DropdownMenuItem<String>> showDropDown() {
-  // List<DropdownMenuItem<String>> dropDownItem = [];
-  // countries.keys.forEach(
-  //   (key) => dropDownItem.add(
-  //     DropdownMenuItem(
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.start,
-  //         children: <Widget>[
-  //           Image.asset(
-  //             "assets/img/${countries[key]}.png",
-  //             width: 20.0,
-  //             height: 15.0,
-  //           ),
-  //           Container(
-  //             width: 10.0,
-  //           ),
-  //           Text(key),
-  //         ],
-  //       ),
-  //       value: countries[key],
-  //     ),
-  //   ),
-  // );
-
-  //   print(dropDownItem.length);
-  //   return dropDownItem;
-  // }
-
   List<DropdownMenuItem<String>> showDropDown() {
     List<DropdownMenuItem<String>> dropDownItem = [];
     totalCountries.forEach(
