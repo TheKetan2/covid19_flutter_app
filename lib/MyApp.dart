@@ -120,47 +120,91 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     print(location);
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      height: 150.0,
-      width: 100.0,
-      padding: EdgeInsets.all(5),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          location["provinceState"] != null
-              ? Text(
-                  "City: ${location["provinceState"]}",
-                  style: TextStyle(color: Colors.black),
-                )
-              : Text(
-                  "Country: ${location["countryRegion"]}",
-                  style: TextStyle(color: Colors.black),
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        // height: 150.0,
+        // width: 200.0,
+        margin: EdgeInsets.all(15),
+        padding: EdgeInsets.all(5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            location["provinceState"] != null
+                ? Text(
+                    location["provinceState"].toUpperCase(),
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  )
+                : Text(
+                    location["countryRegion"].toUpperCase(),
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    textAlign: TextAlign.center,
+                  ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                getInfoBox(
+                  textValue: location["confirmed"],
+                  icon: Entypo.emoji_sad,
+                  color: Colors.orange,
                 ),
-          Text(
-            "Total Cases: ${location["confirmed"]}",
-            style: TextStyle(color: Colors.black),
+                getInfoBox(
+                  textValue: location["recovered"],
+                  icon: Entypo.emoji_happy,
+                  color: Colors.green,
+                ),
+                getInfoBox(
+                  textValue: location["recovered"],
+                  icon: Foundation.skull,
+                  color: Colors.red,
+                )
+              ],
+            ),
+            RaisedButton(
+                color: Colors.red,
+                child: Text("Close"),
+                onPressed: () {
+                  setState(() {
+                    pinClicked = false;
+                  });
+                })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container getInfoBox({textValue, Color color, IconData icon, String title}) {
+    return Container(
+      width: 70,
+      height: 50,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: Colors.black.withAlpha(200),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Icon(
+            icon,
+            size: 20,
+            color: color,
           ),
           Text(
-            "Recovered: ${location["recovered"]}",
-            style: TextStyle(color: Colors.black),
+            textValue.toString(),
+            style: TextStyle(
+              color: color,
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          Text(
-            "Deaths: ${location["deaths"]}",
-            style: TextStyle(color: Colors.black),
-          ),
-          RaisedButton(
-              color: Colors.red,
-              child: Text("Close"),
-              onPressed: () {
-                setState(() {
-                  pinClicked = false;
-                });
-              })
         ],
       ),
     );
@@ -174,16 +218,20 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              // Image.network(
-              //   "https://raw.githubusercontent.com/hjnilsson/country-flags/master/png100px/${country["iso2"].toLowerCase()}.png",
-              //   width: 20.0,
-              //   height: 15.0,
-              // ),
-              // Text(country[""iso2""]),
-              Container(
-                width: 10.0,
+              SizedBox(
+                width: 20,
+              ),
+              Image.network(
+                "https://raw.githubusercontent.com/hjnilsson/country-flags/master/png100px/${country["iso2"].toString().toLowerCase()}.png",
+                width: 20.0,
+              ),
+              SizedBox(
+                width: 20,
               ),
               Text(country["name"]),
+              // Text(
+              //   country["iso2"].toString(),
+              // )
             ],
           ),
           value: country["iso2"],
@@ -207,6 +255,8 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             DropdownButton<String>(
+              isExpanded: true,
+              icon: Icon(Icons.arrow_downward),
               items: showDropDown(),
               onChanged: (String value) {
                 setState(() {
@@ -219,42 +269,73 @@ class _MyHomePageState extends State<MyHomePage> {
               hint: Text("Global info"),
               value: countryName,
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: InfoCard(
-                    icon: Entypo.emoji_sad,
-                    total_cases: total_cases,
-                    title: "TOTAL CASES",
-                    color: Colors.orange,
-                    isLoading: isLoading,
-                  ),
+            Card(
+              child: Container(
+                width: double.infinity,
+                height: 80,
+                margin: EdgeInsets.all(3),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    rowInfoBox(
+                      title: "total cases",
+                      data: total_cases,
+                      color: Colors.orange,
+                      icon: Entypo.emoji_sad,
+                    ),
+                    rowInfoBox(
+                      title: "recovered",
+                      data: recovered,
+                      color: Colors.green,
+                      icon: Entypo.emoji_happy,
+                    ),
+                    rowInfoBox(
+                      title: "deths",
+                      data: deaths,
+                      color: Colors.red,
+                      icon: Foundation.skull,
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: InfoCard(
-                    icon: Entypo.emoji_happy,
-                    total_cases: recovered,
-                    title: "RECOVERED",
-                    color: Colors.green,
-                    isLoading: isLoading,
-                  ),
-                ),
-                Expanded(
-                  child: InfoCard(
-                    icon: Foundation.skull,
-                    total_cases: deaths,
-                    title: "DEATHS",
-                    color: Colors.red,
-                    isLoading: isLoading,
-                  ),
-                ),
-              ],
-            ),
+
+            // Row(
+            //   children: <Widget>[
+            //     Expanded(
+            //       child: InfoCard(
+            //         icon: Entypo.emoji_sad,
+            //         total_cases: total_cases,
+            //         title: "TOTAL CASES",
+            //         color: Colors.orange,
+            //         isLoading: isLoading,
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: <Widget>[
+            //     Expanded(
+            //       child: InfoCard(
+            //         icon: Entypo.emoji_happy,
+            //         total_cases: recovered,
+            //         title: "RECOVERED",
+            //         color: Colors.green,
+            //         isLoading: isLoading,
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: InfoCard(
+            //         icon: Foundation.skull,
+            //         total_cases: deaths,
+            //         title: "DEATHS",
+            //         color: Colors.red,
+            //         isLoading: isLoading,
+            //       ),
+            //     ),
+            // ],
+            // ),
             isLoading
                 ? Expanded(
                     child: Center(
@@ -305,6 +386,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                           pinClicked
                               ? Dialog(
+                                  backgroundColor:
+                                      Colors.white10.withAlpha(100),
                                   elevation: 5.0,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12.0),
@@ -331,6 +414,37 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         tooltip: 'Get Data',
         child: Icon(AntDesign.earth),
+      ),
+    );
+  }
+
+  Container rowInfoBox({String title, data, IconData icon, Color color}) {
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Icon(
+            icon,
+            color: color,
+          ),
+          Text(
+            data.toString(),
+            style: TextStyle(
+                color: color, fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          Text(
+            title.toUpperCase(),
+            style: TextStyle(
+              color: color,
+              fontWeight: FontWeight.bold,
+              fontSize: 10,
+            ),
+          )
+        ],
       ),
     );
   }
