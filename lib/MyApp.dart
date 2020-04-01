@@ -299,7 +299,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       icon: Entypo.emoji_happy,
                     ),
                     rowInfoBox(
-                      title: "deths",
+                      title: "deaths",
                       data: deaths,
                       color: Colors.red,
                       icon: Foundation.skull,
