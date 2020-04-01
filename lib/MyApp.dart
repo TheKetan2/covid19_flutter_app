@@ -87,8 +87,8 @@ class _MyHomePageState extends State<MyHomePage> {
           width: 80.0,
           height: 40.0,
           point: new latLng.LatLng(
-            location["lat"].toDouble(),
-            location["long"].toDouble(),
+            location["lat"] == null ? 80.0 : location["lat"].toDouble(),
+            location["long"] == null ? 40 : location["long"].toDouble(),
           ),
           builder: (context) => new Container(
             child: IconButton(
@@ -159,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Positioned(
           right: 0,
-          top: -9,
+          bottom: -9,
           child: Container(
             width: 25,
             decoration: BoxDecoration(
