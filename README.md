@@ -1,6 +1,10 @@
 # Covid-19 App
 I made this for Topcoder's flutter competetion.
 We were required to implement the Map functionality with some useful feature to go along with it.
+It was also the one of the winning entry :)
+
+# Screencast
+![alt text](assets/img/winner.png)
 
 ### API used:
 https://covid19.mathdro.id/api/
