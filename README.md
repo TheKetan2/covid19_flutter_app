@@ -1,4 +1,4 @@
-# Covid-19 App
+# Covid-19 Map based App
 I made this for Topcoder's flutter competetion.
 We were required to implement the Map functionality with some useful feature to go along with it.
 It was also the one of the winning entry :)
@@ -15,4 +15,5 @@ https://covid19.mathdro.id/api/
 
 # Screencast
 ![alt text](assets/img/screen.gif)
+
 
